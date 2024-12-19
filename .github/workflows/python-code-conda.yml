@@ -3,8 +3,8 @@ on:
   push:
 
 jobs:
-  build-linux:
-    runs-on: push
+  build:
+    runs-on: macOS-latest
 
     steps:
     - uses: actions/checkout@v4
