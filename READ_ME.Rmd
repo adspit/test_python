@@ -1,0 +1,41 @@
+---
+title: "READ_ME"
+author: "Adriana Pitea"
+date: "2024-12-19"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Jupyter Notebook Docker Container
+
+This repository contains a Docker image for running a Jupyter Notebook with Python 
+and to read in the ***taxonomic_data.csv*** and perform the following tasks:   
+
+  1. Calculate total species count for each taxonomic phylum and the average species count per species within each phylum. Write the results to *csv* files.   
+  
+  2. Generate a bar chart showing the total species count for each phylum.
+
+
+## How to Build and Run
+
+1. **Build the Docker Image**:
+  ```bash
+docker build -t jupyter-notebook-image .
+```
+
+2. **Run the Docker Image**:
+```bash
+docker run -p 8888:8888 jupyter-notebook-image
+```
+3. **Access the Jupyter Notebook**:
+
+Open a browser and go to http://127.0.0.1:8888 to access the Jupyter Notebook.
+
+
+
+
