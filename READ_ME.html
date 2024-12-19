@@ -373,18 +373,45 @@ phylum.</p></li>
 <div id="how-to-build-and-run" class="section level2">
 <h2>How to Build and Run</h2>
 <ol style="list-style-type: decimal">
+<li>Create a folder and store the Dockerfile from the git repository in
+it.</li>
+</ol>
+<pre class="bash"><code>mkdir jupyter-docker
+cd jupyter-docker</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>The Dockerfile uses a pre-built image for common data science
+libraries:</li>
+</ol>
+<pre class="bash"><code># Use the official Jupyter notebook image
+FROM jupyter/scipy-notebook:latest
+
+# Set the working directory in the container
+WORKDIR /Users/ads13/Documents/Prepaire_test
+
+# Expose port 8888 to access Jupyter from the browser
+EXPOSE 8888
+
+# Start Jupyter Notebook when the container launches
+CMD [&quot;start-notebook.sh&quot;, &quot;--NotebookApp.token=&#39;&#39;&quot;, &quot;--NotebookApp.password=&#39;&#39;&quot;]</code></pre>
+<ol start="3" style="list-style-type: decimal">
 <li><strong>Build the Docker Image</strong>:</li>
 </ol>
 <pre class="bash"><code>docker build -t jupyter-notebook-image .</code></pre>
-<ol start="2" style="list-style-type: decimal">
+<ol start="4" style="list-style-type: decimal">
 <li><strong>Run the Docker Image</strong>:</li>
 </ol>
-<pre class="bash"><code>docker run -p 8888:8888 jupyter-notebook-image</code></pre>
-<ol start="3" style="list-style-type: decimal">
-<li><strong>Access the Jupyter Notebook</strong>:</li>
+<pre class="bash"><code>docker run -p 8888:8888 -v ~/Prepaire_test:/home/jovyan/work jupyter/scipy-notebook:latest</code></pre>
+<p>To mount your local directory (for example, the directory with the
+Jupyter notebook) to the container so that any files you have in the
+folder will appear in the Jupyter environment, we use the -v flag to
+bind mount a directory. I also had the csv input file in this
+directory.</p>
+<ol start="5" style="list-style-type: decimal">
+<li><strong>Access the Jupyter Notebook</strong>: Open a browser and go
+to <a href="http://127.0.0.1:8888" class="uri">http://127.0.0.1:8888</a>
+to access the Jupyter Notebook, open the <em>ipynb</em> and run the
+code.</li>
 </ol>
-<p>Open a browser and go to <a href="http://127.0.0.1:8888" class="uri">http://127.0.0.1:8888</a> to access the Jupyter
-Notebook.</p>
 </div>
 </div>
 
