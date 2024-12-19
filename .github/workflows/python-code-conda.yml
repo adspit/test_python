@@ -1,51 +1,27 @@
-name: test Python with Docker
-
-# This workflow is triggered on push or pull request to the main branch
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-
 jobs:
-  # Define the job
-  build:
-    runs-on: ubuntu-latest  # Specify the operating system
+  build-linux:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 5
 
     steps:
-    # Step 1: Checkout the repository code
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    # Step 2: Set up Python (version 3.11 as an example)
-    - name: Set up Python 3.11
-      uses: actions/setup-python@v2
+    - uses: actions/checkout@v4
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v3
       with:
-        python-version: 3.11
-
-    # Step 3: Install dependencies from requirements.txt 
+        python-version: '3.10'
+    - name: Add conda to system path
+      run: |
+        # $CONDA is an environment variable pointing to the root of the miniconda directory
+        echo $CONDA/bin >> $GITHUB_PATH
     - name: Install dependencies
       run: |
-        if [ -f requirements.txt ]; then
-          pip install -r requirements.txt
-        fi
-
-    # Step 4: Run tests
-    - name: Run tests
+        conda env update --file environment.yml --name base
+    - name: Lint with advanced_manipulation_prepaire.ipynb
       run: |
-        if [ -f tests/test_sample.py ]; then
-          pytest tests/test_sample.py  # Adjust the test file location and command
-        fi
-
-    # Step 5: Build the Docker image (assuming a Dockerfile exists in the repo)
-    - name: Build Docker image
-      run: |
-        docker build -t test-python-app
-
-    # Step 6: Run Docker container (optional)
-    - name: Run Docker container
-      run: |
-        docker run -d -p 5000:8000 --name test-python-container test-python-app
-
+        conda install jupyter
+        jupyter notebook advanced_manipulation_prepaire.ipynb
+        # stop the build if there are Python syntax errors or undefined names
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
