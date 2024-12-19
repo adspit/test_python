@@ -1,8 +1,6 @@
 jobs:
   build-linux:
-    runs-on: ubuntu-latest
-    strategy:
-      max-parallel: 5
+    runs-on: push
 
     steps:
     - uses: actions/checkout@v4
